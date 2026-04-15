@@ -7,8 +7,10 @@ import { LivingAppsService, createRecordUrl } from '@/services/livingAppsService
 import { formatDate } from '@/lib/formatters';
 import { useState, useMemo } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { IconAlertCircle, IconTool, IconRefresh, IconCheck, IconPlus, IconPencil, IconTrash, IconChevronLeft, IconChevronRight, IconCalendar } from '@tabler/icons-react';
+import { IconAlertCircle, IconTool, IconRefresh, IconCheck, IconPlus, IconPencil, IconTrash, IconChevronLeft, IconChevronRight, IconCalendar, IconUsers, IconClock } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { StatCard } from '@/components/StatCard';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
 import { SchichtplanDialog } from '@/components/dialogs/SchichtplanDialog';
 import { AI_PHOTO_SCAN } from '@/config/ai-features';
@@ -66,6 +68,18 @@ export default function DashboardOverview() {
     return map;
   }, [enrichedSchichtplan, weekDays]);
 
+  const todaySchichten = useMemo(() => {
+    const today = format(new Date(), 'yyyy-MM-dd');
+    return enrichedSchichtplan.filter(s => s.fields.datum === today);
+  }, [enrichedSchichtplan]);
+
+  const weekSchichten = useMemo(() => {
+    const keys = weekDays.map(d => format(d, 'yyyy-MM-dd'));
+    return enrichedSchichtplan.filter(s => keys.includes(s.fields.datum ?? ''));
+  }, [enrichedSchichtplan, weekDays]);
+
+  const confirmedCount = useMemo(() => weekSchichten.filter(s => s.fields.status?.key === 'bestaetigt').length, [weekSchichten]);
+
   const handleCreate = (date?: string) => {
     setEditRecord(null);
     setPrefillDate(date);
@@ -121,6 +135,34 @@ export default function DashboardOverview() {
           <IconChevronRight size={18} className="text-muted-foreground flex-shrink-0" stroke={1.5} />
         </a>
       </div>
+      {/* KPI Row */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <StatCard
+          title="Schichten heute"
+          value={String(todaySchichten.length)}
+          description="Heute geplant"
+          icon={<IconCalendar size={18} className="text-muted-foreground" />}
+        />
+        <StatCard
+          title="Diese Woche"
+          value={String(weekSchichten.length)}
+          description="Schichten gesamt"
+          icon={<IconClock size={18} className="text-muted-foreground" />}
+        />
+        <StatCard
+          title="Bestätigt"
+          value={String(confirmedCount)}
+          description="Diese Woche"
+          icon={<IconCheck size={18} className="text-muted-foreground" />}
+        />
+        <StatCard
+          title="Mitarbeiter"
+          value={String(mitarbeiter.length)}
+          description="Im System"
+          icon={<IconUsers size={18} className="text-muted-foreground" />}
+        />
+      </div>
+
       {/* Week Planner */}
       <div className="bg-card rounded-2xl border border-border overflow-hidden">
         {/* Header */}
@@ -322,6 +364,9 @@ function ShiftCard({
 function DashboardSkeleton() {
   return (
     <div className="space-y-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-24 rounded-2xl" />)}
+      </div>
       <Skeleton className="h-[320px] rounded-2xl" />
     </div>
   );
