@@ -1,0 +1,5 @@
+- Schichttypen (schichttypen): kuerzel[string/text], beginn_uhrzeit[string/text], ende_uhrzeit[string/text], schicht_beschreibung[string/textarea], schicht_name[string/text]
+- Mitarbeiter (mitarbeiter): vorname[string/text], nachname[string/text], abteilung[string/text], position[string/text], telefon[string/tel], email[string/email], verfuegbare_tage[multiplelookup/checkbox], bemerkung[string/textarea]
+- Schichtplan (schichtplan): datum[date/date], mitarbeiter_auswahl[applookup/select], schicht_auswahl[applookup/select], bereich[string/text], status[lookup/select], notizen[string/textarea]
+  → mitarbeiter_auswahl links to app_id 69df92688713553ff17e8819
+  → schicht_auswahl links to app_id 69df926d7bf4060710232839
