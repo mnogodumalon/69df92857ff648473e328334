@@ -119,6 +119,22 @@ export default function DashboardOverview() {
 
   return (
     <div className="space-y-6">
+      {/* Workflow Navigation */}
+      <div>
+        <a
+          href="#/intents/schichteinsatzplanung"
+          className="flex items-center gap-4 bg-card border border-border border-l-4 border-l-primary rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow no-underline"
+        >
+          <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+            <IconCalendar size={20} className="text-primary" stroke={1.5} />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="font-semibold text-foreground truncate">Schichteinsatzplanung</div>
+            <div className="text-sm text-muted-foreground truncate">Schichttyp wählen, Datum festlegen und mehrere Mitarbeiter auf einmal einplanen</div>
+          </div>
+          <IconChevronRight size={18} className="text-muted-foreground flex-shrink-0" stroke={1.5} />
+        </a>
+      </div>
       {/* KPI Row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <StatCard
