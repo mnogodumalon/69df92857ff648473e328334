@@ -7,7 +7,7 @@ import { LivingAppsService, createRecordUrl } from '@/services/livingAppsService
 import { formatDate } from '@/lib/formatters';
 import { useState, useMemo } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { IconAlertCircle, IconTool, IconRefresh, IconCheck, IconPlus, IconPencil, IconTrash, IconChevronLeft, IconChevronRight, IconCalendar } from '@tabler/icons-react';
+import { IconAlertCircle, IconTool, IconRefresh, IconCheck, IconPlus, IconPencil, IconTrash, IconChevronLeft, IconChevronRight, IconCalendar, IconUsers } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import { ConfirmDialog } from '@/components/ConfirmDialog';
 import { SchichtplanDialog } from '@/components/dialogs/SchichtplanDialog';
@@ -242,6 +242,31 @@ export default function DashboardOverview() {
                 {st.fields.beginn_uhrzeit && st.fields.ende_uhrzeit && (
                   <span className="text-xs text-muted-foreground">{st.fields.beginn_uhrzeit}–{st.fields.ende_uhrzeit}</span>
                 )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Mitarbeiter Overview */}
+      {mitarbeiter.length > 0 && (
+        <div className="bg-card rounded-2xl border border-border p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <IconUsers size={16} className="text-muted-foreground shrink-0" />
+            <h3 className="font-semibold text-sm text-foreground">Mitarbeiter ({mitarbeiter.length})</h3>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
+            {mitarbeiter.map(ma => (
+              <div key={ma.record_id} className="flex items-center gap-2 bg-muted/50 rounded-xl px-3 py-2 min-w-0">
+                <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center shrink-0 text-xs font-bold text-primary">
+                  {(ma.fields.vorname?.[0] ?? '?')}{(ma.fields.nachname?.[0] ?? '')}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="text-sm font-medium truncate">{ma.fields.vorname} {ma.fields.nachname}</div>
+                  {(ma.fields.position || ma.fields.abteilung) && (
+                    <div className="text-xs text-muted-foreground truncate">{ma.fields.position || ma.fields.abteilung}</div>
+                  )}
+                </div>
               </div>
             ))}
           </div>
